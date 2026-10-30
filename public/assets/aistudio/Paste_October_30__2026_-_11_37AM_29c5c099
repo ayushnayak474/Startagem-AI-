@@ -1,0 +1,827 @@
+. Header & System Persona Role
+Plaintext
+ROLE: Principal Full-Stack Architect, Staff AI Systems Engineer, and Lead UI/UX Product Designer.
+PROJECT: Stratagem AI — Enterprise Decision Intelligence & Strategic Knowledge Discovery Platform.
+EXECUTION MODE: Autonomous End-to-End Production Build (Zero Placeholders, Zero Mock Data Bypass, Full Type & Schema Safety).
+You are tasked with architecting, implementing, validating, and shipping Stratagem AI, a full-stack AI-powered Decision Intelligence web application. You write clean, modular, strictly validated, production-grade code. You never leave // TODO comments, stubbed functions, or incomplete UI views. Every database table, API endpoint, Zod validator, Gemini structured-output call, and React visual component must be wired end to end.
+
+2. Core Mission Directive
+Organizations and individuals routinely fail to make timely, optimal decisions because critical context is fragmented across qualitative constraints, quantitative metrics, hidden risks, and competing stakeholder priorities.
+
+Your mission is to build a full-stack Decision Intelligence & Research Discovery Platform that transforms ambiguous real-world dilemmas into structured, auditable, data-driven decisions. The platform must ingest decision contexts, constraints, criteria weights, and candidate alternatives; execute multi-dimensional AI trade-off analysis using the official Google Gemini SDK (@google/genai); evaluate risk exposure and sensitivity scenarios; and render explainable, visually interactive recommendations with side-by-side radar, bar, and risk-matrix charts.
+
+3. Product Goal
+Deliver a complete, deployable, multi-tenant web application (Stratagem AI) that enables users to:
+
+Define complex real-world decision problems across strategic domains (Enterprise Architecture, Capital Allocation, Product Strategy, Supply Chain & Operations, Career & Talent, Public Policy & ESG).
+
+Configure weighted evaluation criteria, hard constraints, budget/time ceilings, risk tolerance, and 2 to 6 competing options/alternatives.
+
+Trigger an AI Decision Intelligence Engine powered by Google Gemini (gemini-2.5-flash) that performs:
+
+Multi-Criteria Decision Analysis (MCDA) with normalized scoring (0–100) across every option and criterion.
+
+Pattern & Trade-off Discovery identifying non-obvious synergies, bottlenecks, and second-order effects.
+
+Probabilistic Risk Assessment categorizing risks by likelihood, impact severity, and actionable mitigation strategies.
+
+Scenario Sensitivity Stress-Testing (Best Case, Base Case, Worst Case / Black Swan shock).
+
+Explainable Recommendation Synthesis with transparent reasoning, confidence intervals, and an actionable 30-60-90 day execution roadmap.
+
+Persist, compare, filter, bookmark, and export past decision workspaces and run interactive "What-If" follow-up simulations via an embedded AI Decision Copilot.
+
+4. Mandatory Features
+JWT + bcrypt Authentication & Workspace Isolation: Full user registration, login, session persistence, token refresh/validation middleware, and strict per-user data isolation.
+
+Guided Multi-Step Decision Builder: Dynamic form wizard allowing users to select a domain, define the decision problem, add custom weighted criteria (auto-normalized or validated), input multiple candidate alternatives with pros/cons/estimated costs, and set risk appetite.
+
+AI Decision Intelligence Engine: Server-side integration with @google/genai enforcing strict JSON Schema outputs for deterministic rendering of scores, trade-offs, risk matrices, and explainable rationales.
+
+Interactive Visual Analytics Dashboard (Recharts):
+
+Multi-Option Radar Chart: Comparing alternatives across key evaluation dimensions (Cost Efficiency, Strategic Alignment, Speed to Value, Risk Resilience, Scalability).
+
+Weighted Score Stacked/Grouped Bar Chart: Visualizing total weighted utility scores per alternative.
+
+Risk Exposure Scatter / Heatmap Matrix: Plotting identified risks by Likelihood (1–5) vs. Severity Impact (1–5).
+
+Scenario Sensitivity Comparison Chart: Comparing alternative performance under Base, Optimistic, and Stress-Test scenarios.
+
+Explainable AI (XAI) Audit Trail: Clear breakdown of why the winning option was selected, explicit trade-offs accepted, key assumptions made, and conditions under which the recommendation would flip (reversal triggers).
+
+Interactive "What-If" Simulation Copilot: Contextual chat & parameter perturbation drawer inside each decision report allowing users to ask follow-up questions (e.g., "What if our budget drops by 30% and timeline shrinks to 3 months?") and persist the conversation history.
+
+Decision Knowledge Library & Search: Filterable, searchable repository of all user decisions by domain, status, confidence score, and date, plus one-click sample decision templates for instant demo testing.
+
+Submission & Export Ready: Printable / Markdown-exportable Executive Decision Memo for stakeholder alignment.
+
+5. Technology Requirements
+Frontend:
+
+React.js (v18+) with Vite bundler
+
+React Router v6 (react-router-dom) for client-side routing
+
+Tailwind CSS for responsive, modern dark/light enterprise styling
+
+Recharts (recharts) for data visualizations (RadarChart, BarChart, ScatterChart/Risk Matrix, ComposedChart)
+
+Lucide React (lucide-react) for clean iconography
+
+Axios (axios) with request/response interceptors for JWT authorization
+
+Backend:
+
+Node.js (v20+) + Express.js REST API
+
+Authentication: jsonwebtoken (JWT) and bcryptjs for password hashing
+
+Validation: zod for strict request payload and AI response validation
+
+Security & Middleware: cors, helmet, express-rate-limit, dotenv
+
+Database:
+
+PostgreSQL (compatible with Replit Postgres, Supabase PostgreSQL, Neon, and Railway PostgreSQL) using pg (node-postgres) connection pool with parameterized queries.
+
+Artificial Intelligence:
+
+Official Google Gen AI SDK: @google/genai (GoogleGenAI client)
+
+Model: gemini-2.5-flash with responseMimeType: "application/json" and strict responseSchema configuration.
+
+API key (GEMINI_API_KEY) strictly restricted to backend environment variables.
+
+6. Application Pages (Routes)
+Route Path	Page Component	Access Level	Description
+/	LandingPage	Public	Product overview, live interactive preview metrics, feature highlights, and CTA to Sign Up / Load Demo.
+/login	LoginPage	Public	Email/password login form with validation and instant "Demo Account" one-click login option.
+/register	RegisterPage	Public	New user registration with organization role, full name, email, and strong password validation.
+/dashboard	DashboardPage	Protected	Executive summary KPI cards (Total Decisions, Avg Confidence Score, High-Risk Alerts, Active Domains), recent decisions table, and domain distribution charts.
+/decisions/new	NewDecisionPage	Protected	Multi-step Decision Intelligence Wizard + 1-click "Load Real-World Preset Scenario" buttons for rapid testing.
+/decisions/:id	DecisionReportPage	Protected	Full AI Decision Intelligence Report: Executive Verdict, Recharts visualizations, Option-by-Option Matrix, Risk Register, Scenario Stress Test, 30-60-90 Day Action Plan, and "What-If" AI Copilot Drawer.
+/compare	CompareDecisionsPage	Protected	Side-by-side comparison of two saved decision analyses or historical versions.
+/profile	ProfileSettingsPage	Protected	User profile details, default organizational risk appetite, and session management.
+7. User Flow
+Onboarding & Authentication:
+
+User visits / → clicks Get Started or Try Live Demo → registers at /register or logs in at /login → backend verifies credentials, issues a signed JWT (7d expiry), and redirects to /dashboard.
+
+Decision Framing & Input Capture:
+
+User clicks + New Decision Analysis (/decisions/new).
+
+User either selects one of 4 pre-built rich real-world scenarios (for instant evaluation) OR completes the 4-part structured form:
+
+Step 1: Title, Domain Category, Decision Urgency, and Problem Context/Background.
+
+Step 2: Hard Constraints (Budget ceiling, Timeline deadline, Regulatory/Technical non-negotiables) & Risk Appetite (Conservative, Balanced, Aggressive).
+
+Step 3: Evaluation Criteria (e.g., Total Cost of Ownership, Time-to-Market, Scalability, Risk Exposure, Strategic Fit) with importance weights (1–10).
+
+Step 4: Candidate Alternatives (minimum 2, up to 6 options) with description, estimated cost, estimated timeline, and known pros/cons.
+
+AI Analysis Execution:
+
+User submits the decision payload → Backend validates payload with Zod → Saves raw decision & options in PostgreSQL within a transaction → Invokes Gemini (gemini-2.5-flash) with structured JSON Schema → Validates AI output with Zod → Persists structured report, option scores, risk matrix, and sensitivity scenarios in PostgreSQL → Returns complete payload to Frontend.
+
+Interactive Exploration & What-If Simulation:
+
+User is routed to /decisions/:id → Explores the winning recommendation, confidence score, Recharts Radar & Bar charts, Risk Matrix, and Reversal Triggers.
+
+User opens the What-If Simulation Copilot panel → Submits a perturbation query → Backend fetches the full decision context + prior report, queries Gemini for a quantitative sensitivity re-evaluation, saves the interaction, and updates the UI in real time.
+
+8. Target Domains & Categorization
+The system must support the following 6 core decision domains, each with tailored default evaluation criteria templates:
+
+Technology & Cloud Architecture (TECH_ARCH)
+
+Default Criteria: Scalability & Performance, Total Cost of Ownership (TCO), Engineering Velocity, Security & Compliance, Vendor Lock-in Risk.
+
+Product & Go-To-Market Strategy (PRODUCT_GTM)
+
+Default Criteria: Revenue Potential, Customer Acquisition Cost, Time to Market, Competitive Differentiation, Execution Complexity.
+
+Capital Allocation & M&A Investment (FINANCE_INVEST)
+
+Default Criteria: Expected ROI / NPV, Payback Period, Downside Liquidity Risk, Strategic Synergy, Market Volatility Resilience.
+
+Supply Chain & Operations (OPERATIONS_SUPPLY)
+
+Default Criteria: Unit Cost Efficiency, Lead Time Reliability, Geopolitical/Single-Point Failure Risk, ESG & Sustainability Compliance, Inventory Flexibility.
+
+Organizational Talent & Workforce (TALENT_ORG)
+
+Default Criteria: Time to Productivity, Compensation & Retention Cost, Cultural & Skill Alignment, Long-Term Leadership Upside, Operational Disruption.
+
+Public Policy, Sustainability & ESG (POLICY_ESG)
+
+Default Criteria: Measurable Social/Environmental Impact, Regulatory Compliance Certainty, Fiscal Feasibility, Stakeholder Acceptance, Long-Term Maintainability.
+
+9. Form & Advisory Configuration
+The Decision Builder form (/decisions/new) must enforce the following structured configuration and include 4 One-Click Preset Templates so evaluators can test the AI engine immediately without typing long paragraphs:
+
+Decision Metadata:
+
+title (String, 5–150 chars)
+
+domain (Enum: TECH_ARCH, PRODUCT_GTM, FINANCE_INVEST, OPERATIONS_SUPPLY, TALENT_ORG, POLICY_ESG)
+
+urgency (Enum: LOW, MEDIUM, HIGH, CRITICAL)
+
+riskAppetite (Enum: CONSERVATIVE, BALANCED, AGGRESSIVE)
+
+stakeholders (String, e.g., "Board of Directors, VP Engineering, CFO")
+
+Context & Constraints:
+
+problemStatement (String, 30–3000 chars)
+
+budgetConstraint (String, e.g., "$250,000 annual run-rate ceiling")
+
+timelineConstraint (String, e.g., "Must be production-ready within Q3 (16 weeks)")
+
+nonNegotiables (Array of Strings, e.g., ["SOC2 Type II compliance", "Zero downtime migration"])
+
+Evaluation Criteria Array (3 to 8 items):
+
+name (String, e.g., "Total Cost of Ownership")
+
+weight (Integer, 1 to 10)
+
+description (String, optional context on how to judge this criterion)
+
+Candidate Alternatives Array (2 to 6 items):
+
+name (String, e.g., "Option A: Multi-Region Serverless Refactor")
+
+summary (String, 10–1000 chars)
+
+estimatedCost (String, e.g., "$180,000 / year")
+
+estimatedTimeline (String, e.g., "14 weeks")
+
+knownNotes (String, optional initial assumptions or caveats)
+
+10. Database Schema (Production SQL for PostgreSQL)
+Execute or auto-initialize the following idempotent PostgreSQL schema on server startup (server/db/init.sql):
+
+SQL
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- 1. USERS TABLE
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name VARCHAR(120) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    organization VARCHAR(150) DEFAULT 'Independent Workspace',
+    role_title VARCHAR(100) DEFAULT 'Decision Strategist',
+    default_risk_appetite VARCHAR(20) DEFAULT 'BALANCED' CHECK (default_risk_appetite IN ('CONSERVATIVE', 'BALANCED', 'AGGRESSIVE')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 2. DECISIONS TABLE (Core Workspace Record)
+CREATE TABLE IF NOT EXISTS decisions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(180) NOT NULL,
+    domain VARCHAR(40) NOT NULL CHECK (domain IN ('TECH_ARCH', 'PRODUCT_GTM', 'FINANCE_INVEST', 'OPERATIONS_SUPPLY', 'TALENT_ORG', 'POLICY_ESG')),
+    urgency VARCHAR(20) NOT NULL CHECK (urgency IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+    risk_appetite VARCHAR(20) NOT NULL CHECK (risk_appetite IN ('CONSERVATIVE', 'BALANCED', 'AGGRESSIVE')),
+    stakeholders TEXT,
+    problem_statement TEXT NOT NULL,
+    budget_constraint VARCHAR(255),
+    timeline_constraint VARCHAR(255),
+    non_negotiables JSONB NOT NULL DEFAULT '[]'::jsonb,
+    criteria JSONB NOT NULL DEFAULT '[]'::jsonb,
+    alternatives JSONB NOT NULL DEFAULT '[]'::jsonb,
+    status VARCHAR(30) NOT NULL DEFAULT 'ANALYZED' CHECK (status IN ('DRAFT', 'ANALYZED', 'ARCHIVED')),
+    recommended_option_name VARCHAR(255),
+    confidence_score INTEGER CHECK (confidence_score >= 0 AND confidence_score <= 100),
+    ai_report JSONB,
+    is_bookmarked BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 3. DECISION SIMULATIONS / WHAT-IF COPILOT LOGS
+CREATE TABLE IF NOT EXISTS decision_simulations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    decision_id UUID NOT NULL REFERENCES decisions(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_prompt TEXT NOT NULL,
+    ai_simulation_response JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- PERFORMANCE INDEXES
+CREATE INDEX IF NOT EXISTS idx_decisions_user_id ON decisions(user_id);
+CREATE INDEX IF NOT EXISTS idx_decisions_domain ON decisions(domain);
+CREATE INDEX IF NOT EXISTS idx_decisions_created_at ON decisions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_simulations_decision_id ON decision_simulations(decision_id);
+11. Row Level Security (RLS) / Data Isolation Rules
+Strict Tenant Isolation: Every query against decisions and decision_simulations MUST filter explicitly by WHERE user_id = $1 using the authenticated req.user.id extracted ONLY from the verified JWT payload—never from client-supplied body or query parameters.
+
+Ownership Verification Middleware: Before returning, updating, deleting, or running a "What-If" simulation on /api/decisions/:id, the backend must verify that the record exists AND decision.user_id === req.user.id. If not found or unauthorized, return HTTP 404 Not Found (to prevent resource enumeration).
+
+Database-Level RLS Compatibility (Supabase / Postgres): Include optional SQL policies so that if deployed on Supabase with PostgREST, direct table access is restricted to the owning user:
+
+SQL
+ALTER TABLE decisions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE decision_simulations ENABLE ROW LEVEL SECURITY;
+(Note: The Express backend connects via the server pool and enforces application-layer user_id parameterized filtering on 100% of queries).
+
+12. Backend API Routes
+All routes must be prefixed with /api and return consistent JSON structures ({ success: boolean, data?: any, error?: string, details?: any }).
+
+Authentication Routes (/api/auth)
+POST /api/auth/register — Validate input via Zod, check email uniqueness, hash password with bcrypt (12 salt rounds), insert user, return JWT and user profile.
+
+POST /api/auth/login — Validate credentials, verify password hash, return signed JWT and user profile.
+
+POST /api/auth/demo — Automatically provision or log into a seeded Demo Strategist account (demo@stratagem.ai) with pre-populated realistic decision analyses so judges/evaluators can explore immediately.
+
+GET /api/auth/me — (Protected) Return current authenticated user profile.
+
+PUT /api/auth/profile — (Protected) Update full_name, organization, role_title, and default_risk_appetite.
+
+Decision Intelligence Routes (/api/decisions)
+GET /api/decisions — (Protected) List all decisions belonging to req.user.id. Supports query filters: domain, urgency, search, bookmarked. Returns summary metadata and KPI aggregates.
+
+GET /api/decisions/stats — (Protected) Return aggregated analytics for the user's dashboard: total decisions, average confidence score, count by domain, count by urgency, and top risk categories.
+
+POST /api/decisions/analyze — (Protected) Validate decision input payload with Zod, invoke the Gemini Decision Intelligence Engine (gemini-2.5-flash), validate the structured JSON output, persist the complete record in decisions, and return the created decision + full ai_report.
+
+GET /api/decisions/:id — (Protected) Fetch a single decision by ID (enforcing user_id = req.user.id), including its ai_report and all associated decision_simulations.
+
+PATCH /api/decisions/:id/bookmark — (Protected) Toggle is_bookmarked boolean status.
+
+DELETE /api/decisions/:id — (Protected) Permanently delete a decision workspace owned by the user.
+
+What-If Simulation & Copilot Routes (/api/decisions/:id/simulate)
+POST /api/decisions/:id/simulate — (Protected) Accept a "What-If" perturbation prompt (e.g., budget cut, new competitor, regulatory shift), run Gemini sensitivity re-evaluation against the stored decision context and current ai_report, persist in decision_simulations, and return the structured simulation delta.
+
+Health Check
+GET /api/health — Public health check returning server uptime, database connectivity status, and confirm boolean geminiConfigured: true (never exposing the key).
+
+13. Gemini SDK Setup & Server-Side Security
+You MUST use the modern @google/genai SDK (NOT the deprecated @google/generative-ai package).
+
+JavaScript
+// server/services/geminiService.js
+import { GoogleGenAI, Type } from "@google/genai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+if (!process.env.GEMINI_API_KEY) {
+  console.error("CRITICAL: GEMINI_API_KEY is missing from environment variables.");
+}
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const MODEL_NAME = "gemini-2.5-flash";
+Server-Side Security Rules for AI Calls:
+GEMINI_API_KEY must NEVER be prefixed with VITE_ or sent to the browser.
+
+Always use config: { systemInstruction, responseMimeType: "application/json", responseSchema, temperature: 0.2 } to guarantee deterministic, well-calibrated analytical outputs.
+
+Wrap all Gemini API calls in a try/catch block with automatic JSON parsing and Zod verification. If the API fails or times out, return a clear, structured HTTP 502 Bad Gateway error message explaining the upstream issue.
+
+14. AI System Prompt
+Use the following systemInstruction for the primary Decision Intelligence Engine:
+
+Plaintext
+You are Stratagem AI, a Principal Decision Intelligence Architect, Quantitative Risk Analyst, and Executive Strategy Advisor.
+
+Your mandate is to help organizations and individuals make rigorous, explainable, data-driven decisions under uncertainty. When presented with a decision problem, constraints, weighted criteria, and candidate alternatives, you must:
+
+1. Perform Multi-Criteria Decision Analysis (MCDA): Score every candidate alternative objectively from 0 to 100 on each user-defined criterion AND on 5 standardized radar dimensions (Cost Efficiency, Strategic Alignment, Speed to Value, Risk Resilience, Scalability).
+2. Calculate Weighted Utility Scores: Compute an accurate overall weighted score (0 to 100) for each option reflecting the user's explicit criterion weights, constraints, and risk appetite.
+3. Uncover Hidden Patterns & Trade-Offs: Identify non-obvious second-order consequences, opportunity costs, bottleneck dependencies, and asymmetric upsides.
+4. Conduct Probabilistic Risk Assessment: Build a concrete risk register identifying specific failure modes, assigning each a Likelihood score (1 to 5) and Impact Severity score (1 to 5), along with actionable mitigation protocols.
+5. Run Scenario Sensitivity Stress-Tests: Evaluate how each option performs across three distinct futures: Base Case (Expected), Optimistic Case (Tailwinds), and Stress-Test Case (Budget cut, timeline compression, or market shock).
+6. Deliver Explainable Recommendations (XAI): Name a clear recommended option, quantify a confidence score (0 to 100), state the decisive reasoning, list critical assumptions that must hold true, and specify explicit "Reversal Triggers" (exact quantitative or qualitative thresholds that would cause a rational decision-maker to switch to the runner-up option).
+7. Formulate an Execution Roadmap: Provide a concrete 30-60-90 day implementation plan with measurable KPIs.
+
+Maintain an objective, analytical, boardroom-ready tone. Base all scores and trade-offs strictly on the provided constraints and domain realities.
+15. Detailed AI Prompts (with required JSON Schemas)
+Prompt 1: Full Decision Intelligence Analysis (generateDecisionAnalysis)
+Dynamic User Prompt Template:
+
+Plaintext
+Analyze the following decision scenario and generate a comprehensive Decision Intelligence Report:
+
+DECISION TITLE: {{title}}
+DOMAIN: {{domain}}
+URGENCY: {{urgency}}
+RISK APPETITE: {{riskAppetite}}
+KEY STAKEHOLDERS: {{stakeholders}}
+
+PROBLEM STATEMENT & CONTEXT:
+{{problemStatement}}
+
+HARD CONSTRAINTS:
+- Budget Ceiling: {{budgetConstraint}}
+- Timeline Ceiling: {{timelineConstraint}}
+- Non-Negotiables: {{nonNegotiablesJson}}
+
+WEIGHTED EVALUATION CRITERIA (Scale 1-10):
+{{criteriaJson}}
+
+CANDIDATE ALTERNATIVES TO EVALUATE:
+{{alternativesJson}}
+
+Evaluate every candidate alternative rigorously against all criteria and constraints. Ensure every option name in your output matches the input candidate alternative names.
+Required @google/genai responseSchema for Prompt 1:
+
+JavaScript
+export const decisionAnalysisResponseSchema = {
+  type: Type.OBJECT,
+  required: [
+    "executiveSummary",
+    "recommendedOptionName",
+    "runnerUpOptionName",
+    "confidenceScore",
+    "confidenceRationale",
+    "decisionPatterns",
+    "optionEvaluations",
+    "radarComparison",
+    "scenarioSensitivity",
+    "riskMatrix",
+    "explainabilityAudit",
+    "executionRoadmap"
+  ],
+  properties: {
+    executiveSummary: {
+      type: Type.STRING,
+      description: "High-level 3-4 sentence synthesis of the decision dilemma, the winning choice, and the core strategic rationale."
+    },
+    recommendedOptionName: {
+      type: Type.STRING,
+      description: "Exact name of the winning option."
+    },
+    runnerUpOptionName: {
+      type: Type.STRING,
+      description: "Exact name of the second-best alternative."
+    },
+    confidenceScore: {
+      type: Type.INTEGER,
+      description: "Overall confidence score from 0 to 100 in the recommendation."
+    },
+    confidenceRationale: {
+      type: Type.STRING,
+      description: "Explanation of why the confidence score is at this level and what data gaps create uncertainty."
+    },
+    decisionPatterns: {
+      type: Type.ARRAY,
+      description: "3 to 4 key patterns, hidden dynamics, or structural bottlenecks discovered across the data.",
+      items: {
+        type: Type.OBJECT,
+        required: ["patternTitle", "insight", "strategicImplication"],
+        properties: {
+          patternTitle: { type: Type.STRING },
+          insight: { type: Type.STRING },
+          strategicImplication: { type: Type.STRING }
+        }
+      }
+    },
+    optionEvaluations: {
+      type: Type.ARRAY,
+      description: "Detailed evaluation for every candidate alternative.",
+      items: {
+        type: Type.OBJECT,
+        required: [
+          "optionName",
+          "overallWeightedScore",
+          "rank",
+          "constraintCompliance",
+          "strengths",
+          "weaknesses",
+          "tradeOffSummary",
+          "criteriaScores"
+        ],
+        properties: {
+          optionName: { type: Type.STRING },
+          overallWeightedScore: { type: Type.NUMBER, description: "Normalized weighted score 0-100" },
+          rank: { type: Type.INTEGER },
+          constraintCompliance: {
+            type: Type.STRING,
+            description: "FULL_COMPLIANCE, PARTIAL_RISK, or VIOLATES_CONSTRAINT"
+          },
+          strengths: { type: Type.ARRAY, items: { type: Type.STRING } },
+          weaknesses: { type: Type.ARRAY, items: { type: Type.STRING } },
+          tradeOffSummary: { type: Type.STRING },
+          criteriaScores: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              required: ["criterionName", "weight", "rawScore", "justification"],
+              properties: {
+                criterionName: { type: Type.STRING },
+                weight: { type: Type.NUMBER },
+                rawScore: { type: Type.NUMBER, description: "Score from 0 to 100" },
+                justification: { type: Type.STRING }
+              }
+            }
+          }
+        }
+      }
+    },
+    radarComparison: {
+      type: Type.ARRAY,
+      description: "Standardized 5-dimension scores (0-100) for each option to render in a Recharts RadarChart.",
+      items: {
+        type: Type.OBJECT,
+        required: [
+          "optionName",
+          "costEfficiency",
+          "strategicAlignment",
+          "speedToValue",
+          "riskResilience",
+          "scalability"
+        ],
+        properties: {
+          optionName: { type: Type.STRING },
+          costEfficiency: { type: Type.NUMBER },
+          strategicAlignment: { type: Type.NUMBER },
+          speedToValue: { type: Type.NUMBER },
+          riskResilience: { type: Type.NUMBER },
+          scalability: { type: Type.NUMBER }
+        }
+      }
+    },
+    scenarioSensitivity: {
+      type: Type.ARRAY,
+      description: "Performance of each option under Base Case, Optimistic Case, and Stress-Test Case (0-100 score).",
+      items: {
+        type: Type.OBJECT,
+        required: ["optionName", "baseCaseScore", "optimisticCaseScore", "stressTestScore", "stressVulnerabilityNote"],
+        properties: {
+          optionName: { type: Type.STRING },
+          baseCaseScore: { type: Type.NUMBER },
+          optimisticCaseScore: { type: Type.NUMBER },
+          stressTestScore: { type: Type.NUMBER },
+          stressVulnerabilityNote: { type: Type.STRING }
+        }
+      }
+    },
+    riskMatrix: {
+      type: Type.ARRAY,
+      description: "5 to 8 concrete risks across the options plotted by likelihood (1-5) and impact (1-5).",
+      items: {
+        type: Type.OBJECT,
+        required: ["riskId", "riskTitle", "affectedOption", "category", "likelihood", "impact", "mitigationStrategy", "earlyWarningIndicator"],
+        properties: {
+          riskId: { type: Type.STRING },
+          riskTitle: { type: Type.STRING },
+          affectedOption: { type: Type.STRING },
+          category: { type: Type.STRING, description: "FINANCIAL, TECHNICAL, OPERATIONAL, MARKET, or REGULATORY" },
+          likelihood: { type: Type.INTEGER, description: "Integer 1 (Rare) to 5 (Almost Certain)" },
+          impact: { type: Type.INTEGER, description: "Integer 1 (Negligible) to 5 (Catastrophic)" },
+          mitigationStrategy: { type: Type.STRING },
+          earlyWarningIndicator: { type: Type.STRING }
+        }
+      }
+    },
+    explainabilityAudit: {
+      type: Type.OBJECT,
+      required: ["whyWinnerWon", "whyRunnerUpLost", "keyAssumptions", "reversalTriggers"],
+      properties: {
+        whyWinnerWon: { type: Type.STRING },
+        whyRunnerUpLost: { type: Type.STRING },
+        keyAssumptions: { type: Type.ARRAY, items: { type: Type.STRING } },
+        reversalTriggers: {
+          type: Type.ARRAY,
+          description: "Specific conditions or threshold changes that would flip the decision to another option.",
+          items: { type: Type.STRING }
+        }
+      }
+    },
+    executionRoadmap: {
+      type: Type.ARRAY,
+      description: "3 phases: Days 1-30 (Foundation), Days 31-60 (Execution), Days 61-90 (Validation & Scale).",
+      items: {
+        type: Type.OBJECT,
+        required: ["phase", "objective", "actionItems", "successMetric"],
+        properties: {
+          phase: { type: Type.STRING },
+          objective: { type: Type.STRING },
+          actionItems: { type: Type.ARRAY, items: { type: Type.STRING } },
+          successMetric: { type: Type.STRING }
+        }
+      }
+    }
+  }
+};
+Prompt 2: "What-If" Simulation Copilot (runWhatIfSimulation)
+Required @google/genai responseSchema for Prompt 2:
+
+JavaScript
+export const whatIfSimulationResponseSchema = {
+  type: Type.OBJECT,
+  required: [
+    "simulationSummary",
+    " doesRecommendationChange",
+    "newRecommendedOption",
+    "updatedConfidenceScore",
+    "scoreAdjustments",
+    "newRisksIntroduced",
+    "tacticalAdvice"
+  ],
+  properties: {
+    simulationSummary: { type: Type.STRING },
+    doesRecommendationChange: { type: Type.BOOLEAN },
+    newRecommendedOption: { type: Type.STRING },
+    updatedConfidenceScore: { type: Type.INTEGER },
+    scoreAdjustments: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        required: ["optionName", "previousScore", "simulatedScore", "deltaReason"],
+        properties: {
+          optionName: { type: Type.STRING },
+          previousScore: { type: Type.NUMBER },
+          simulatedScore: { type: Type.NUMBER },
+          deltaReason: { type: Type.STRING }
+        }
+      }
+    },
+    newRisksIntroduced: { type: Type.ARRAY, items: { type: Type.STRING } },
+    tacticalAdvice: { type: Type.STRING }
+  }
+};
+(Note: Ensure property name doesRecommendationChange has no leading whitespace in implementation).
+
+16. Zod Validation Requirements
+Create server/validators/schemas.js to validate all incoming requests AND outgoing AI responses:
+
+JavaScript
+import { z } from "zod";
+
+export const registerSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters").max(120),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  organization: z.string().max(150).optional().default("Independent Workspace"),
+  roleTitle: z.string().max(100).optional().default("Decision Strategist"),
+  defaultRiskAppetite: z.enum(["CONSERVATIVE", "BALANCED", "AGGRESSIVE"]).optional().default("BALANCED")
+});
+
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1, "Password is required")
+});
+
+export const criterionSchema = z.object({
+  name: z.string().min(2).max(100),
+  weight: z.number().int().min(1).max(10),
+  description: z.string().max(300).optional().default("")
+});
+
+export const alternativeSchema = z.object({
+  name: z.string().min(2).max(120),
+  summary: z.string().min(10).max(1500),
+  estimatedCost: z.string().min(1).max(120),
+  estimatedTimeline: z.string().min(1).max(120),
+  knownNotes: z.string().max(500).optional().default("")
+});
+
+export const createDecisionSchema = z.object({
+  title: z.string().min(5).max(180),
+  domain: z.enum([
+    "TECH_ARCH",
+    "PRODUCT_GTM",
+    "FINANCE_INVEST",
+    "OPERATIONS_SUPPLY",
+    "TALENT_ORG",
+    "POLICY_ESG"
+  ]),
+  urgency: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+  riskAppetite: z.enum(["CONSERVATIVE", "BALANCED", "AGGRESSIVE"]),
+  stakeholders: z.string().max(255).optional().default("Executive Leadership"),
+  problemStatement: z.string().min(30).max(4000),
+  budgetConstraint: z.string().min(2).max(255),
+  timelineConstraint: z.string().min(2).max(255),
+  nonNegotiables: z.array(z.string().min(2).max(200)).max(10).default([]),
+  criteria: z.array(criterionSchema).min(2, "Provide at least 2 evaluation criteria").max(8),
+  alternatives: z.array(alternativeSchema).min(2, "Provide at least 2 alternatives to compare").max(6)
+});
+
+export const whatIfPromptSchema = z.object({
+  userPrompt: z.string().min(10, "Describe the What-If scenario in at least 10 characters").max(1500)
+});
+17. Frontend Components List
+Build modular, polished React components under client/src/components/:
+
+Navbar.jsx & Sidebar.jsx: Responsive application shell displaying user workspace badge, navigation links (Dashboard, New Decision, Compare, Settings), and quick logout.
+
+ProtectedRoute.jsx: Auth guard verifying JWT state and redirecting unauthenticated visitors to /login.
+
+PresetScenarioSelector.jsx: One-click cards loading 4 realistic preset scenarios into the Decision Wizard:
+
+Scenario 1 (Cloud & AI Architecture): "Enterprise LLM Deployment: Self-Hosted Open-Weight GPU Cluster vs. Managed Cloud API vs. Hybrid RAG Gateway"
+
+Scenario 2 (Supply Chain & Operations): "Semiconductor Component Sourcing: Single-Source Taiwan Foundry vs. Dual-Shore Mexico/Vietnam vs. Domestic Buffer Stockpiling"
+
+Scenario 3 (Product & GTM Strategy): "SaaS Pricing Model Pivot: Usage-Based Consumption Pricing vs. Tiered Seat Licensing vs. Freemium Product-Led Growth"
+
+Scenario 4 (Capital Allocation): "Series B $12M Capital Deployment: Acquire Boutique Competitor vs. European Market Expansion vs. Core R&D Automation"
+
+DecisionWizardForm.jsx: Interactive multi-step form with dynamic criterion weight sliders, real-time percentage weight normalization badges, and dynamic option cards.
+
+ExecutiveVerdictBanner.jsx: Hero banner on the Decision Report page highlighting the Winning Option, Runner-Up, animated Confidence Gauge (0–100%), Urgency pill, and Executive Summary.
+
+RadarTradeoffChart.jsx: Recharts RadarChart comparing all options across the 5 standardized dimensions (Cost Efficiency, Strategic Alignment, Speed to Value, Risk Resilience, Scalability).
+
+WeightedScoreBarChart.jsx: Recharts horizontal/vertical BarChart comparing overall weighted utility scores alongside Base, Optimistic, and Stress-Test scenario bars.
+
+RiskHeatmapMatrix.jsx: Interactive 5x5 Likelihood vs. Impact grid + Recharts ScatterChart and expandable risk mitigation table color-coded by severity (LOW, MEDIUM, HIGH, CRITICAL).
+
+ExplainabilityAuditPanel.jsx: Dedicated XAI section displaying Why the Winner Won, Why the Runner-Up Fell Short, Core Assumptions, and Reversal Triggers.
+
+ActionRoadmapTimeline.jsx: 3-column 30-60-90 Day implementation roadmap with concrete deliverables and target KPIs.
+
+WhatIfCopilotDrawer.jsx: Slide-over or split-pane interactive simulation panel where users run parameter perturbations and see immediate score deltas (previousScore → simulatedScore).
+
+ExportDecisionMemoModal.jsx: Generates a clean, formatted Markdown / Print-ready Executive Decision Record for copying or saving as PDF.
+
+18. Security Requirements
+Password Security: Hash all passwords with bcryptjs using 12 salt rounds. Never return password_hash in any API response.
+
+JWT Authentication: Sign tokens with process.env.JWT_SECRET and set expiration (expiresIn: "7d"). Verify tokens in server/middleware/authMiddleware.js via the Authorization: Bearer <token> header.
+
+API Key Protection: GEMINI_API_KEY and DATABASE_URL must reside strictly on the server. Add .env to .gitignore.
+
+Rate Limiting: Apply express-rate-limit on /api/auth/* (20 requests / 15 min) and /api/decisions/analyze (30 requests / hour) to prevent abuse and quota exhaustion.
+
+HTTP Hardening: Enable helmet() for secure HTTP headers and configure cors() to allow process.env.CLIENT_URL (and localhost during development).
+
+SQL Injection Prevention: Use exclusively parameterized queries ($1, $2, ...) with pg.Pool. String concatenation in SQL queries is strictly forbidden.
+
+19. Environment Variables Template
+Create .env.example in the root / backend directory and client/.env.example for the frontend:
+
+Backend (.env.example)
+Code snippet
+PORT=5000
+NODE_ENV=development
+DATABASE_URL=postgresql://postgres:password@localhost:5432/stratagem_db
+JWT_SECRET=replace_with_64_char_cryptographic_random_secret_key
+GEMINI_API_KEY=replace_with_your_google_gemini_api_key
+CLIENT_URL=http://localhost:5173
+Frontend (client/.env.example)
+Code snippet
+VITE_API_BASE_URL=http://localhost:5000/api
+20. Suggested Folder Structure
+Plaintext
+stratagem-ai/
+├── README.md
+├── package.json
+├── .env.example
+├── server/
+│   ├── index.js
+│   ├── config/
+│   │   └── db.js
+│   ├── db/
+│   │   ├── init.sql
+│   │   └── seedDemo.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   └── errorHandler.js
+│   ├── validators/
+│   │   └── schemas.js
+│   ├── services/
+│   │   ├── geminiService.js
+│   │   └── schemas/
+│   │       └── geminiSchemas.js
+│   └── routes/
+│       ├── authRoutes.js
+│       └── decisionRoutes.js
+└── client/
+    ├── package.json
+    ├── vite.config.js
+    ├── tailwind.config.js
+    ├── index.html
+    └── src/
+        ├── main.jsx
+        ├── App.jsx
+        ├── index.css
+        ├── context/
+        │   └── AuthContext.jsx
+        ├── services/
+        │   └── api.js
+        ├── constants/
+        │   └── presetScenarios.js
+        ├── components/
+        │   ├── Navbar.jsx
+        │   ├── ProtectedRoute.jsx
+        │   ├── PresetScenarioSelector.jsx
+        │   ├── DecisionWizardForm.jsx
+        │   ├── ExecutiveVerdictBanner.jsx
+        │   ├── RadarTradeoffChart.jsx
+        │   ├── WeightedScoreBarChart.jsx
+        │   ├── RiskHeatmapMatrix.jsx
+        │   ├── ExplainabilityAuditPanel.jsx
+        │   ├── ActionRoadmapTimeline.jsx
+        │   ├── WhatIfCopilotDrawer.jsx
+        │   └── ExportDecisionMemoModal.jsx
+        └── pages/
+            ├── LandingPage.jsx
+            ├── LoginPage.jsx
+            ├── RegisterPage.jsx
+            ├── DashboardPage.jsx
+            ├── NewDecisionPage.jsx
+            ├── DecisionReportPage.jsx
+            ├── CompareDecisionsPage.jsx
+            └── ProfileSettingsPage.jsx
+21. Implementation Phases
+Execute the build systematically in these 5 phases:
+
+Phase 1: Database & Backend Foundation
+
+Initialize Node.js/Express server, configure pg connection pool, auto-run init.sql table migrations on startup, and implement seedDemo.js so the demo account (demo@stratagem.ai) has 2 rich pre-computed Decision Intelligence reports out of the box.
+
+Phase 2: Authentication & Zod Validation Layer
+
+Build /api/auth/* endpoints (register, login, demo, me, profile), JWT verification middleware, and Zod request validation middleware.
+
+Phase 3: Gemini Decision Intelligence Service (@google/genai)
+
+Implement geminiService.js with generateDecisionAnalysis and runWhatIfSimulation using gemini-2.5-flash and strict responseSchema definitions. Wire /api/decisions/* routes with full ownership checks.
+
+Phase 4: React Frontend Core, Auth Flow & Decision Wizard
+
+Set up Vite + React Router + Tailwind CSS, AuthContext, Axios interceptor, LandingPage, LoginPage (including 1-click Demo Login), DashboardPage, and NewDecisionPage with the 4 one-click enterprise scenario presets.
+
+Phase 5: Interactive Visualizations, XAI Audit, What-If Copilot & Submission Documentation
+
+Build DecisionReportPage with Recharts RadarChart, BarChart, 5x5 Risk Heatmap Matrix, Explainability Audit cards, 30-60-90 Day Roadmap, What-If Simulation Drawer, CompareDecisionsPage, and comprehensive README.md (including Problem Statement, Solution Description, Architecture Diagram, Setup Steps, and Deployment Guide).
+
+22. Acceptance Criteria
+Before marking the build complete, verify that all of the following pass:
+
+Zero Placeholders: No file contains TODO, FIXME, mock stub returns in place of real database queries, or unimplemented UI tabs.
+
+Database Persistence & Isolation: Creating a decision saves all inputs and the Gemini JSON report to PostgreSQL; User A cannot view, simulate, or delete User B's decisions.
+
+Strict Gemini Structured Output: All AI responses conform to decisionAnalysisResponseSchema and whatIfSimulationResponseSchema using @google/genai on the backend only.
+
+Visual Charts Render Accurately: RadarTradeoffChart, WeightedScoreBarChart, and RiskHeatmapMatrix dynamically render real scores from the active decision report without console errors or layout overflow.
+
+Instant Evaluator Experience: Clicking "Try One-Click Demo Account" on /login immediately logs in and displays populated dashboard metrics and full decision reports; clicking any Preset Scenario on /decisions/new pre-fills all criteria and alternatives for immediate AI analysis.
+
+Submission Artifacts Included: Root README.md contains the formal Problem Statement, Solution Description, System Architecture, API Documentation, Local Setup Instructions, and Vercel / Render / Supabase / Railway Deployment Steps.
+
+23. Final Instruction to Coding Agent
+Begin implementation immediately starting with Phase 1. Create all directories, package manifests, database schema initialization scripts, backend services, React components, and documentation files in full. Do not ask for confirmation between files—write complete, production-ready code until the entire Stratagem AI platform is runnable and verified.
+
+Need the accompanying submission deliverables or starter code files next?
+
+Write the submission Problem Statement, Solution Overview, and Video Script
+
+Generate the complete backend server code (Express + Gemini + Postgres)
+
+Generate the complete React frontend code with Recharts visualizations

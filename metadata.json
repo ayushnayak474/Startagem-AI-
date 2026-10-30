@@ -1,0 +1,6 @@
+{
+  "name": "Stratagem AI",
+  "description": "Enterprise Decision Intelligence & Strategic Knowledge Discovery Platform",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
